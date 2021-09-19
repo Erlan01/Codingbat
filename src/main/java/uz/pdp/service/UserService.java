@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import uz.pdp.model.UserDto;
 
 public interface UserService {
-    ResponseEntity<?> register(UserDto dto);
+    ResponseEntity<?> create(UserDto dto);
 
     ResponseEntity<?> getAll();
 

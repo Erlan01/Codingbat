@@ -3,7 +3,7 @@ package uz.pdp.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import uz.pdp.entity.Language;
+import uz.pdp.domain.Language;
 import uz.pdp.model.LanguageDto;
 import uz.pdp.repository.LanguageRepo;
 import uz.pdp.service.LanguageService;

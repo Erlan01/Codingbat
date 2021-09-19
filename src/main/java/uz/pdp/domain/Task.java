@@ -1,4 +1,4 @@
-package uz.pdp.entity;
+package uz.pdp.domain;
 
 import lombok.*;
 

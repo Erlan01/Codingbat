@@ -1,6 +1,7 @@
 package uz.pdp.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.model.UserDto;
 import uz.pdp.service.UserService;
@@ -23,9 +24,9 @@ public class UserController {
     }
 
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody UserDto dto) {
-        return userService.register(dto);
+    @PostMapping("/create")
+    public ResponseEntity<?> create(@Validated @RequestBody UserDto dto) {
+        return userService.create(dto);
     }
 
     @PutMapping("/edit/{id}")

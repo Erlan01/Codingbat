@@ -1,12 +1,5 @@
 package uz.pdp.service.impl;
 
-import com.codingbat.entity.Language;
-import com.codingbat.entity.Task;
-import com.codingbat.mapper.MapstructMapper;
-import com.codingbat.model.TaskDto;
-import com.codingbat.repository.LanguageRepo;
-import com.codingbat.repository.TaskRepo;
-import com.codingbat.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -39,28 +32,38 @@ public class TaskServiceImpl implements TaskService {
         if (optionalLanguage.isPresent()) {
             return ResponseEntity.status(404).body("Language not found");
         }
-        Task task = Task.builder().build();
-        return ResponseEntity.status(201).body(dto);
+        Task task = Task.builder()
+                .code(dto.getCode())
+                .description(dto.getDescription())
+                .language(optionalLanguage.get())
+                .solution(dto.getSolution()).build();
+        return ResponseEntity.status(201).body(taskRepo.save(task));
     }
 
     @Override
     public ResponseEntity<?> edit(Long id, TaskDto dto) {
-
         Optional<Task> optionalTask = taskRepo.findById(id);
-        if (optionalTask.isEmpty())
+        if (!optionalTask.isPresent()) {
             return ResponseEntity.status(404).body("Task not found");
+        }
         Optional<Language> optionalLanguage = languageRepo.findById(dto.getLanguageId());
-        if (optionalLanguage.isEmpty())
+        if (!optionalLanguage.isPresent()) {
             return ResponseEntity.status(404).body("Language not found");
-        taskRepo.save(mapstructMapper.toTask(optionalTask.get(), dto));
-        return ResponseEntity.status(201).body(dto);
+        }
+        Task task = optionalTask.get();
+        task.setCode(dto.getCode() != null ? dto.getCode() : task.getCode());
+        task.setDescription(dto.getDescription() != null ? dto.getDescription() : task.getDescription());
+        task.setSolution(dto.getSolution() != null ? dto.getSolution() : task.getSolution());
+        task.setLanguage(optionalLanguage.get());
+        return ResponseEntity.status(201).body(taskRepo.save(task));
     }
 
     @Override
     public ResponseEntity<?> getById(Long id) {
         Optional<Task> optionalTask = taskRepo.findById(id);
-        if (optionalTask.isEmpty())
+        if (!optionalTask.isPresent()) {
             return ResponseEntity.status(404).body("Task not found");
+        }
         return ResponseEntity.status(200).body(optionalTask.get());
     }
 
@@ -72,9 +75,10 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public ResponseEntity<?> delete(Long id) {
         Optional<Task> optionalTask = taskRepo.findById(id);
-        if (optionalTask.isEmpty())
+        if (!optionalTask.isPresent()) {
             return ResponseEntity.status(404).body("Task not found");
+        }
         taskRepo.delete(optionalTask.get());
-        return ResponseEntity.status(200).body(mapstructMapper.toTaskDto(optionalTask.get()));
+        return ResponseEntity.status(200).body("Task deleted");
     }
 }

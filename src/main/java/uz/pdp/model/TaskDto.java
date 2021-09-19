@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,11 +15,15 @@ import lombok.Setter;
 @Setter
 public class TaskDto {
 
+    @NotNull
     private Long languageId;
 
+    @NotNull
     private String code;
 
+    @NotNull
     private String description;
 
+    @NotNull
     private String solution;
 }
